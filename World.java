@@ -1,4 +1,4 @@
-package d;
+package zz;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
@@ -7,6 +7,7 @@ import java.util.Random;
 import javax.swing.*;
 
 public class World extends JPanel implements Runnable{
+	private zuizhong observe;
 	private final int rows;
 	private final int columns;
 	JLabel  record;
@@ -22,11 +23,14 @@ public class World extends JPanel implements Runnable{
 	private CellStatus[][] currentGeneration;
 	private CellStatus[][] nextGeneration;
 	private volatile boolean isChanging = false;
-	public World(int rows, int columns)
+	
+	public World(int rows, int columns,zuizhong observe)
 	{
+        
 		setPreferredSize(new Dimension(columns*15,rows*15));
 		this.rows=rows;
 		this.columns=columns;
+		this.setBackground(Color.LIGHT_GRAY);
 		generation1=new CellStatus[rows][columns];
 		//addMouseMotionListener(this);
 		for(int i=0;i<rows;i++)
@@ -127,6 +131,7 @@ public class World extends JPanel implements Runnable{
 	{
 		speed=1;
 	}
+
 	public void paintComponent(Graphics g)
 	{
 		lnum=0;
@@ -137,12 +142,16 @@ public class World extends JPanel implements Runnable{
 			{
 				if(currentGeneration[i][j]==CellStatus.Active)
 				{
-					g.fillRect(j*15, i*15, 15, 15);
+					//g.drawImage(img, j*15, i*15, 15, 15, observe);
+					g.setColor(Color.green);
+					g.fillOval(j*15, i*15, 15, 15);
 					lnum++;
 				}
 				else
 				{
-					g.drawRect(j*15, i*15, 15, 15);
+					//g.drawImage(img1, j*15, i*15, 15, 15, observe);
+					g.setColor(Color.green);
+					g.drawOval(j*15, i*15, 15, 15);
 				}
 			}
 		}
@@ -159,7 +168,12 @@ public class World extends JPanel implements Runnable{
 		{
 			for(int j=0;j<columns;j++)
 			{
-				shape[i][j]=Math.abs(a.nextInt(2));
+				int aa=Math.abs(a.nextInt(7));
+				if(aa==0){
+					shape[i][j]=1; 	
+				}else{
+					shape[i][j]=0;
+				}
 				pauseshape[i][j]=shape[i][j];
 			}
 		}
