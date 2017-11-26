@@ -1,132 +1,66 @@
 package d;
 
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.GridLayout;
-import java.awt.Insets;
+import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 
-import javax.swing.BorderFactory;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JSlider;
-import javax.swing.JTextField;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 
-public class zuizhong extends JFrame{// implements MouseMotionListener
+public class LifeGame extends JFrame implements MouseMotionListener,MouseListener{
 	private final World world;
+	//static JButton location=new JButton();
 	JSlider changeSpeed;
-	public zuizhong(){
-		world = new World(40,40);
-		world.setLayout(null);
-        world.setBounds(7, 10, 40*15, 40*15);
-      //  world.setBackground(Color.black);
-        world.addMouseListener(new MouseListener() {
-
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				if(world.diy){
-				int x=e.getX();
-				int y=e.getY();
-				//button.setText("x:"+x+"y:"+y);
-				World.pauseshape[(y-30)/15+2][(x-16)/15+1]=1;
-				world.setDiy();
-				
-				}else if(world.clean&&e.getX()<40*15&&e.getY()<40*15){
-					int x=e.getX();
-					int y=e.getY();
-					//button.setText("x:"+x+"y:"+y);
-					World.pauseshape[(y-30)/15+2 ][(x-16)/15+1]=0;
-					world.setDiy();
-					}
-				
-			}
-
-			@Override
-			public void mousePressed(MouseEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-
-			@Override
-			public void mouseReleased(MouseEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-
-			@Override
-			public void mouseEntered(MouseEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-
-			@Override
-			public void mouseExited(MouseEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-        	
-        });
-        
-        JPanel setting= new JPanel();
-		setting.setLayout(null);
-		setting.setBackground(Color.CYAN);
-        setting.setBounds(0, 620, 620, 90);
-        setting=control(setting);   
-		add(world);	
-		add(setting);
+	public LifeGame()
+	{
+		world=new World(37,37);
+		world.setBackground(Color.LIGHT_GRAY);
 		new Thread(world).start();
+		//add(world);
 	}
-	public JPanel control(JPanel c){
-        JPanel control=c;
-        
-        int but_x=50;
+	public void lunchFrame() {
+		addMouseMotionListener(this);
+		JPanel control=new JPanel();
+		
+		
+		JPanel modeP=new JPanel();
+		JLabel mode=new JLabel("Mode:");	
 		JButton random=new JButton("Random");
-		random.setFont(new Font("宋体", Font.BOLD, 10));
-		random.setMargin(new Insets(0,0,0,0));
 		random.addActionListener(this.new RandomActionListener());
-		random.setBounds(20, 10, but_x, 30);
-		
 		JButton choose=new JButton("Add");
-		choose.setFont(new Font("宋体", Font.BOLD, 10));
-		choose.setMargin(new Insets(0,0,0,0));
 		choose.addActionListener(this.new DIYActionListener());
-		choose.setBounds(90, 10,but_x, 30);
-		
 		JButton clean=new JButton("Kill");
-		clean.setMargin(new Insets(0,0,0,0));
-		clean.setFont(new Font("宋体", Font.BOLD, 10));
 		clean.addActionListener(this.new CleanActionListener());
-		clean.setBounds(160, 10, but_x, 30);
+		//clean.addMouseListener(this.new CleanActionListener());
+		modeP.add(mode);modeP.add(random);modeP.add(choose);modeP.add(clean);
 		
+		
+		JPanel playP=new JPanel();
+		JLabel play=new JLabel("Play:");	
 		JButton start=new JButton("Start");
-		start.setFont(new Font("宋体", Font.BOLD, 10));
-		start.setMargin(new Insets(0,0,0,0));
 		start.addActionListener(this.new StartActionListener());
-		start.setBounds(230, 10, but_x, 30);
-		
 		JButton pause=new JButton("Pause");
-		pause.setFont(new Font("宋体", Font.BOLD, 10));
-		pause.setMargin(new Insets(0,0,0,0));
 		pause.addActionListener(this.new PauseActionListener());
-		pause.setBounds(300, 10, but_x, 30);
-		
 		JButton stop=new JButton("Stop");
-		stop.setFont(new Font("宋体", Font.BOLD, 10));
-		stop.setMargin(new Insets(0,0,0,0));
 		stop.addActionListener(this.new StopActionListener());
-		stop.setBounds(370, 10, but_x, 30);
+		playP.add(play);playP.add(start);playP.add(pause);playP.add(stop);
 		
-		  changeSpeed=new JSlider();
+		
+		JPanel speedP=new JPanel();
+		JLabel speed=new JLabel("Speed:");	
+		//JButton slow=new JButton("Slow");
+		//slow.addActionListener(this.new SlowActionListener());
+		//JButton fast=new JButton("Fast");
+		//fast.addActionListener(this.new FastActionListener());
+		//JButton hyper=new JButton("Hyper");
+		//hyper.addActionListener(this.new HyperActionListener());
+		
+		changeSpeed=new JSlider();
 		//设置滑块必须停在刻度处  
         changeSpeed.setSnapToTicks(true);  
         //设置绘制刻度  
@@ -136,33 +70,55 @@ public class zuizhong extends JFrame{// implements MouseMotionListener
         changeSpeed.setMinimum(1);
         changeSpeed.setValue(1);
         changeSpeed.addChangeListener(new SpeedListener());
+       // changeSpeed.setMajorTickSpacing(8);  
         changeSpeed.setMinorTickSpacing(1);  
-        changeSpeed.setPreferredSize(new Dimension(400, 40));
-        changeSpeed.setBounds(440,10,150,30);
-	   		
-		control.add(changeSpeed);
-		control.add(stop);
-		control.add(pause);
-		control.add(start);
-		control.add(random);
-		control.add(clean);
-		control.add(choose);
+		speedP.add(speed);
+	    speedP.add(changeSpeed);
+	    
+		JPanel otherP=new JPanel();
+		JLabel other=new JLabel("Other:");	
+		JButton help=new JButton("Help");
+		help.addActionListener(this.new HelpActionListener());	
+		JButton about=new JButton("About");
+		about.addActionListener(this.new AboutActionListener());
+		//otherP.setLayout(new FlowLayout());
+		other.setBounds(0, 0, 20,30);
+		otherP.add(other);otherP.add(help);otherP.add(about);
+		
+		
+		control.add(modeP);control.add(playP);control.add(speedP);control.add(otherP);
+		control.setSize(200, 400);
+		control.setPreferredSize(new Dimension(300,420));
+		control.setLayout(new GridLayout(4,1));
 		control.setBorder(BorderFactory.createRaisedBevelBorder());//上凸边框
-		return control;
+		//control.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+		
+		//world.setSize(700, 470);
+		
+		add(world);
+		add(control);
+		
+		setLayout(new FlowLayout());
+		//setLayout(new GridLayout(1,2));
+		//about.addActionListener(frame.new AboutActionListener());
+		//setLocationRelativeTo();//这样就会默认显示在屏幕中央
+		setLocation(150,50);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		//setSize(900,470);
+		pack();
+		setTitle("Game of Life");
+		setVisible(true);
+		setResizable(false);
 	}
 	
-	public static void main(String[] args) {
-		zuizhong a=new zuizhong();
-		a.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		a.setSize(620,700);
-		a.setLayout(null);
-		//a.getContentPane().setBackground(Color.green);
+	public static void main(String[]args)
+	{
+		LifeGame frame=new LifeGame();
+		frame.lunchFrame();
 		
-		a.setVisible(true);
-		a.setResizable(false);
-		a.setTitle("Game of Life");
-		a.setLocationRelativeTo(null);
+		
 	}
+
 	class RandomActionListener implements ActionListener
 	{
 		public void actionPerformed(ActionEvent e) 
@@ -200,10 +156,10 @@ public class zuizhong extends JFrame{// implements MouseMotionListener
 	{
 		public void actionPerformed(ActionEvent e) 
 		{
-			world.setPause();
 			world.setBackground(Color.LIGHT_GRAY);
 			world.diy=false;
 			world.clean=false;
+			world.setPause();
 		}
 	}
 	
@@ -215,6 +171,44 @@ public class zuizhong extends JFrame{// implements MouseMotionListener
 			world.getSpeed(9-changeSpeed.getValue());
 			
 			
+		}
+	}
+	
+//	class SlowActionListener implements ActionListener
+//	{
+//		public void actionPerformed(ActionEvent e) 
+//		{
+//			world.changeSpeedSlow();
+//		}
+//	}
+//	class FastActionListener implements ActionListener
+//	{
+//		public void actionPerformed(ActionEvent e) 
+//		{
+//			world.changeSpeedFast();
+//		}
+//	}
+//	class HyperActionListener implements ActionListener
+//	{
+//		public void actionPerformed(ActionEvent e) 
+//		{
+//			world.changeSpeedHyper();
+//		}
+//	}
+	class HelpActionListener implements ActionListener
+	{
+		public void actionPerformed(ActionEvent e) 
+		{
+			JOptionPane.showMessageDialog(null, "这是生命游戏!!!\n生命游戏是英国数学家约翰·何顿·康威在1970年发明的细胞自动机\n "+"1．如果一个细胞周围有3个细胞为生，则该细胞为生;\n"
+												+"2． 如果一个细胞周围有2个细胞为生，则该细胞的生死状态保持不变;\n"
+												+"3． 在其它情况下，该细胞为死。");
+		}
+	}
+	class AboutActionListener implements ActionListener
+	{
+		public void actionPerformed(ActionEvent e) 
+		{
+			JOptionPane.showMessageDialog(null, "游戏作者：李钊，林俊雄，孟猛，尉盛龙");
 		}
 	}
 	class CleanActionListener implements ActionListener
@@ -237,9 +231,54 @@ public class zuizhong extends JFrame{// implements MouseMotionListener
 			world.setBackground(Color.cyan);
 		}
 	}
-	
+	@Override
+	public void mouseDragged(MouseEvent e) {
+		// TODO Auto-generated method stub
+		if(world.diy){
+		int x=e.getX();
+		int y=e.getY();
+		//button.setText("x:"+x+"y:"+y);
+		World.pauseshape[(y-30)/15][(x-16)/15]=1;
+		world.setDiy();
+		}
+	}
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		// TODO Auto-generated method stub
+		if(world.clean&&e.getX()<37*15&&e.getY()<37*15){
+		int x=e.getX();
+		int y=e.getY();
+		//System.out.println(x);
+		//System.out.println(y);
+		//button.setText("x:"+x+"y:"+y);
+		World.pauseshape[(y-30)/15][(x-16)/15]=0;
+		world.setDiy();
+		}
+	}
+	@Override
+	public void mousePressed(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void mouseReleased(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void mouseEntered(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void mouseExited(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void mouseMoved(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
 }
-
-
-	
 
