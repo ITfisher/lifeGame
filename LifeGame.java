@@ -1,4 +1,3 @@
-package d;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
@@ -8,13 +7,11 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 
-
-public class LifeGame extends JFrame implements MouseMotionListener,MouseListener{
+public class LifeGame extends JFrame implements MouseMotionListener{
 	private final World world;
-	//static JButton location=new JButton();
+	static JButton location=new JButton();
 	JSlider changeSpeed;
 	public LifeGame()
 	{
@@ -36,7 +33,6 @@ public class LifeGame extends JFrame implements MouseMotionListener,MouseListene
 		choose.addActionListener(this.new DIYActionListener());
 		JButton clean=new JButton("Kill");
 		clean.addActionListener(this.new CleanActionListener());
-		//clean.addMouseListener(this.new CleanActionListener());
 		modeP.add(mode);modeP.add(random);modeP.add(choose);modeP.add(clean);
 		
 		
@@ -173,7 +169,6 @@ public class LifeGame extends JFrame implements MouseMotionListener,MouseListene
 			
 		}
 	}
-	
 //	class SlowActionListener implements ActionListener
 //	{
 //		public void actionPerformed(ActionEvent e) 
@@ -243,7 +238,7 @@ public class LifeGame extends JFrame implements MouseMotionListener,MouseListene
 		}
 	}
 	@Override
-	public void mouseClicked(MouseEvent e) {
+	public void mouseMoved(MouseEvent e) {
 		// TODO Auto-generated method stub
 		if(world.clean&&e.getX()<37*15&&e.getY()<37*15){
 		int x=e.getX();
@@ -254,31 +249,6 @@ public class LifeGame extends JFrame implements MouseMotionListener,MouseListene
 		World.pauseshape[(y-30)/15][(x-16)/15]=0;
 		world.setDiy();
 		}
-	}
-	@Override
-	public void mousePressed(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-	@Override
-	public void mouseReleased(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-	@Override
-	public void mouseEntered(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-	@Override
-	public void mouseExited(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-	@Override
-	public void mouseMoved(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
 	}
 }
 
